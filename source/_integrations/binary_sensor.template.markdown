@@ -288,6 +288,29 @@ binary_sensor:
 
 {% endraw %}
 
+### Rate limiting updates
+
+When there are entities present in the template, the template will be re-rendered when one of the entities changes states.
+
+When `states` is used in a template by itself to iterate all states on the system, the template is re-rendered each
+time any state changed event happens if any part of the state is accessed. When merely counting states, the template
+is only re-rendered when a state is added or removed from the system. On busy systems with many entities or hundreds of
+thousands state changed events per day, templates may re-render more than desirable.
+
+In the below example, re-renders are limited to once per minute:
+
+{% raw %}
+```yaml
+binary_sensor:
+  - platform: template
+    sensors:
+      has_unavailable_states:
+        value_template: '{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}'
+```
+{% endraw %}
+
+If the template accesses every state on the system or all states under a specific domain, a rate limit of one update per minute is applied. If the template only accesses specific states, receives update events for specifically referenced entities, or the `homeassistant.update_entity` service is used, no rate limit is applied.
+
 ### Working without entities
 
 The `template` sensors are not limited to use attributes from other entities but can also work with [Home Assistant's template extensions](/docs/configuration/templating/#home-assistant-template-extensions). If the template includes some non-deterministic property such as time in its calculation, the result will not continually update, but will only update when some entity referenced by the template updates. 

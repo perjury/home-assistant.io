@@ -71,12 +71,13 @@ ZHA integration uses a hardware independent Zigbee stack implementation with mod
 
 ### Experimental support for additional Zigbee radio modules
 
-- Texas Instruments CC253x, CC26x2R, and CC13x2 based radios (via the [zigpy-cc](https://github.com/zigpy/zigpy-cc) library for zigpy)
-  - [CC2531 USB stick hardware flashed with custom Z-Stack coordinator firmware from the Zigbee2mqtt project](https://www.zigbee2mqtt.io/getting_started/what_do_i_need.html)
-  - [CC2530 + CC2591/CC2592 USB stick hardware flashed with custom Z-Stack coordinator firmware from the Zigbee2mqtt project](https://www.zigbee2mqtt.io/getting_started/what_do_i_need.html)
-  - [CC2538 + CC2592 dev board hardware flashed with custom Z-Stack coordinator firmware from the Zigbee2mqtt project](https://www.zigbee2mqtt.io/getting_started/what_do_i_need.html)
-  - [CC2652P/CC2652R/CC2652RB USB stick or dev board hardware flashed with custom Z-Stack coordinator firmware from the Zigbee2mqtt project](https://www.zigbee2mqtt.io/information/supported_adapters)
-  - [CC1352P/CC1352R USB stick or dev board hardware flashed with custom Z-Stack coordinator firmware from the Zigbee2mqtt project](https://www.zigbee2mqtt.io/information/supported_adapters)
+- Texas Instruments based radios with Z-Stack 3.x.x (via the [zigpy-znp](https://github.com/zha-ng/zigpy-znp) library for zigpy)
+  - [CC2652P/CC2652R/CC2652RB USB stick or dev board hardware flashed with Z-Stack 3.x.x coordinator firmware](https://www.zigbee2mqtt.io/information/supported_adapters)
+  - [CC1352P/CC1352R USB stick or dev board hardware flashed with Z-Stack 3.x.x coordinator firmware](https://www.zigbee2mqtt.io/information/supported_adapters)
+- Texas Instruments based radios with Z-Stack Home 1.2.x (via the [zigpy-cc](https://github.com/zigpy/zigpy-cc) library for zigpy)
+  - [CC2531 USB stick hardware flashed with Z-Stack Home 1.2.x coordinator firmware](https://www.zigbee2mqtt.io/information/supported_adapters)
+  - [CC2530 + CC2591/CC2592 USB stick hardware flashed with Z-Stack Home 1.2.x coordinator firmware](https://www.zigbee2mqtt.io/information/supported_adapters)
+  - [CC2538 + CC2592 dev board hardware flashed with Z-Stack Home 1.2.x coordinator firmware](https://www.zigbee2mqtt.io/information/supported_adapters)
 - ZiGate based radios (via the [zigpy-zigate](https://github.com/zigpy/zigpy-zigate) library for zigpy and require firmware 3.1a or later)
   - [ZiGate USB-TTL](https://zigate.fr/produit/zigate-ttl/)
   - [ZiGate USB-DIN](https://zigate.fr/produit/zigate-usb-din/)
@@ -143,6 +144,45 @@ enable_quirks:
 {% endconfiguration %}
 
 To add new devices to the network, call the `permit` service on the `zha` domain. Do this by clicking the Service icon in Developer tools and typing `zha.permit` in the **Service** dropdown box. Next, follow the device instructions for adding, scanning or factory reset.
+
+
+## Services
+
+### Service `zha.permit`
+
+This service opens network for joining new devices.
+
+|  Data | Optional | Description |
+| ---- | ---- | ----------- |
+| `duration` |  yes | For how long to allow new devices to join, default 60s
+| `ieee` | yes | allow new devices to join via an existing device
+
+To join a new device using an install code (ZB3 devices) use the following data attributes (must use parameters only
+from the same group:
+
+|  Data | Parameter Group | Description |
+| ---- | ---- | ----------- |
+| `src_ieee` | install_code | The IEEE address of the joining ZB3 device. Use with `install_code`
+| `install_code` | install_code | Install Code of the joining device. Use with `src_ieee`
+| `qr_code` | qr_code | QR code containing IEEE and Install Code of the joining ZB3 device
+
+<div class='note'>
+
+  Currently `qr_code` supports QR Install Codes from:
+  
+  - Aqara
+  - Consciot
+  - Embrighten
+
+</div>
+
+### Service `zha.remove`
+
+This service remove an existing device from the network.
+
+|  Data | Optional | Description |
+| ---- | ---- | ----------- |
+| `ieee` | no | IEEE address of the device to remove 
 
 ### OTA firmware updates
 
