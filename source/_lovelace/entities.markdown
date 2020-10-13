@@ -125,7 +125,33 @@ double_tap_action:
   description: Action taken on card double tap. See [action documentation](/lovelace/actions/#double-tap-action).
   type: map
 {% endconfiguration %}
+## Example
+```yaml
+type: entities
+entities:
+  - entity: climate.upstairs_heat_heating
+    name: 1st Floor heating
+    icon: 'mdi:thermostat-box'
+  - entity: climate.downstairs_heat_heating
+    name: Ground Floor heating
+    state_color: true
+title: My Heating System
+icon: 'mdi:radiator'
+show_header_toggle: true
+theme: midnight
+state_color: false
+header:
+  type: buttons
+  entities:
+    - entity: script.turn_water_heating_on
+      icon: 'mdi:water-boiler'
+footer:
+  type: buttons
+  entities:
+    - entity: script.turn_water_heating_off
+      icon: 'mdi:water-boiler-off'
 
+```
 ## Special Row Elements
 
 ### Button
