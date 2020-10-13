@@ -46,7 +46,22 @@ footer:
   description: Footer widget to render. See [footer documentation](/lovelace/header-footer/).
   type: map
 {% endconfiguration %}
-
+## Example
+```yaml
+type: entities
+entities:
+  - climate.upstairs_heat_heating
+  - climate.downstairs_heat_heating
+title: My Heating System
+icon: 'mdi:radiator'
+show_header_toggle: true
+theme: midnight
+state_color: true
+footer:
+  type: buttons
+  entities:
+    - script.turn_water_heating_on
+```
 ## Options For Entities
 
 If you define entities as objects instead of strings (by adding `entity:` before entity ID), you can add more customization and configuration:
